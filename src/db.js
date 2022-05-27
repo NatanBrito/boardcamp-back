@@ -1,7 +1,13 @@
 import pg from 'pg';
-// import dotenv from "dotenv"; lembrar de mudar
+import dotenv from "dotenv";
+// .ENV  nao funcionando
+// dotenv.config();
 const {Pool}= pg;
-
+const user='postgres';
+const password='19951995';
+const host='localhost';
+const port=5432;
+const database='DB_TESTE';
 
 const db = new Pool({
 user,
