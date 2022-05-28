@@ -11,8 +11,8 @@ try{
      const games= Listgames.rows
     if(name){
       const search=games.filter((game)=>{
-         
-      if((game.name).includes(name)){
+      const sliceName= (game.name).slice(0,name.length)   
+      if(sliceName.includes(name)){
           return game
       }
       })  
@@ -24,5 +24,5 @@ try{
     }catch(e){
         return res.sendStatus(400);
     }
-    res.sendStatus(201);
+
 }
