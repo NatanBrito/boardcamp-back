@@ -7,7 +7,7 @@ const user='postgres';
 const password='19951995';
 const host='localhost';
 const port=5432;
-const database='DB_TESTE';
+const database='boardcamp';
 
 const db = new Pool({
 user,
