@@ -4,7 +4,7 @@ export async function validateData(req,res,next){
   const  schema= joi.object({
       name:joi.string().required()
   })
-  const {value, error}= schema.validate(req.body);
+  const {error}= schema.validate(req.body);
   if(error){
     return res.sendStatus(400)
     }
