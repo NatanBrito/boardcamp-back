@@ -68,15 +68,18 @@ export async function postCustomer(req,res){
     }
 }
 export async function putCustomer(req,res){
+    const {name,phone,cpf,birthday}= req.body
     const {id}= req.params;
     const customerId= parseInt(id);
-    res.status(215).send(id);
-    const updateCustomer=15;
-    // {
-    //     name: 'João Alfredo',
-    //     phone: '21998899222',
-    //     cpf: '01234567890',
-    //     birthday: '1992-10-05'
-    //   }
-    return;
+    try{
+        const updateCustomer= await db.query(`
+        UPDATE customers
+        SET name=$1,phone=$2 ,cpf=$3,birthday=$4 WHERE id=${customerId};
+        `,[name,phone,cpf,birthday]);
+        res.sendStatus(200);
+        return;
+    }catch(e){
+        res.sendStatus(400);
+        return;
+    } 
 }
