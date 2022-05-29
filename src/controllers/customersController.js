@@ -1,9 +1,23 @@
 import db from '../db.js';
 
 export async function getCustomers(req,res){
+    const {id}= req.params;
+    const customerId= parseInt(id);
     const {cpf}= req.query;
-    console.log(cpf)
     try{
+        if(id){
+            const userId= await db.query(`
+            SELECT *
+            FROM customers
+            WHERE id=${customerId}
+            `);
+            if((userId.rows).length){
+                res.send(userId.rows); 
+            } else{
+                res.sendStatus(404)
+            }
+            return;
+        }
         const listCustomers= await db.query(`
         SELECT * 
         FROM  customers
@@ -29,4 +43,8 @@ export async function getCustomers(req,res){
         res.sendStatus(400);
         return;
     }
+}
+
+export async function postCustomer(req,res){
+    res.sendStatus(225)
 }
