@@ -46,5 +46,37 @@ export async function getCustomers(req,res){
 }
 
 export async function postCustomer(req,res){
-    res.sendStatus(225)
+    const {name,phone,cpf,birthday}= req.body
+    try{
+            const cpfValidate= await db.query(`
+            SELECT customers.cpf 
+            FROM customers
+            WHERE customers.cpf= '${req.body.cpf}'
+            ;
+            `)
+            if((cpfValidate.rows).length){
+                res.sendStatus(409);
+                return;
+            }
+        const insertCustomers= db.query(`
+        INSERT INTO customers (name,phone,cpf,birthday)
+        VALUES ($1,$2,$3,$4)
+        `,[name,phone,cpf,birthday]);
+        res.sendStatus(201)
+    }catch(e){
+        res.send(400)
+    }
+}
+export async function putCustomer(req,res){
+    const {id}= req.params;
+    const customerId= parseInt(id);
+    res.status(215).send(id);
+    const updateCustomer=15;
+    // {
+    //     name: 'João Alfredo',
+    //     phone: '21998899222',
+    //     cpf: '01234567890',
+    //     birthday: '1992-10-05'
+    //   }
+    return;
 }
