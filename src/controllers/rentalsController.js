@@ -88,7 +88,6 @@ export async function getRentals(req,res){
 }
 export async function postRentals(req,res){
     const {customerId,gameId,daysRented}= req.body;
-    console.log(dayjs().format('YYYY-MM-DD'));
     try{
         const {rows}= await db.query(`
         SELECT games."pricePerDay" 
@@ -117,4 +116,64 @@ export async function postRentals(req,res){
         res.sendStatus(400);
         return;
     }
+}
+
+export async function postIdRentals(req,res){
+  const {id}= req.params;
+  const userId=parseInt(id);
+  try{
+  const dataRent= await db.query(`
+    SELECT rentals.*, rentals."returnDate" 
+    FROM rentals
+    WHERE id=$1;
+  `,[userId]);
+   let rent=dataRent.rows[0];
+    if(dataRent.rows.length<1){
+        res.sendStatus(400);
+        return;
+    }
+     (dataRent.rows).filter((rent)=>{
+         if(rent.id !== userId){return  res.sendStatus(404)}
+         if(rent.returnDate !== null){return res.sendStatus(400)}
+     })
+     rent.returnDate=dayjs().format('YYYY-MM-DD');
+     const returnDate = dayjs(rent.returnDate);
+     const rentDate = dayjs(rent.rentDate);
+     const atraso = returnDate.diff(rentDate, "day");
+    const updateRent= await db.query(`
+    UPDATE rentals SET 
+    "delayFee"=${atraso>0?atraso*rent.originalPrice:null}
+    WHERE id=${userId}  ;
+     `);
+    res.sendStatus(200);
+    return;
+    }catch(e){
+        res.sendStatus(400);
+    }
+}
+export async function deleteRentals(req,res){
+    const {id}= req.params;
+    const userId=parseInt(id);
+    try{
+    const dataRent= await db.query(`
+      SELECT rentals.*, rentals."returnDate" 
+      FROM rentals
+      WHERE id=$1;
+    `,[userId]);
+     let rent=dataRent.rows[0];
+      if(rent.returnDate !== null){
+          return res.sendStatus(400)
+      }
+      if(dataRent.rows.length<1){
+          res.sendStatus(404);
+          return;
+      }
+      const deleteRent= await db.query(`
+      DELETE FROM rentals WHERE id=$1
+      `,[userId]);
+      res.sendStatus(200)
+    }catch(e){
+        res.sendStatus(400);
+    }
+
 }
