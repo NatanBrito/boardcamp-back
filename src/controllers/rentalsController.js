@@ -142,7 +142,8 @@ export async function postIdRentals(req,res){
      const atraso = returnDate.diff(rentDate, "day");
     const updateRent= await db.query(`
     UPDATE rentals SET 
-    "delayFee"=${atraso>0?atraso*rent.originalPrice:null}
+    "delayFee"=${atraso>0?atraso*rent.originalPrice:null},
+    "returnDate"= NOW()
     WHERE id=${userId}  ;
      `);
     res.sendStatus(200);
