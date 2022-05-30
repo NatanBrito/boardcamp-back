@@ -87,6 +87,34 @@ export async function getRentals(req,res){
   }
 }
 export async function postRentals(req,res){
+    const {customerId,gameId,daysRented}= req.body;
     console.log(dayjs().format('YYYY-MM-DD'));
-    res.sendStatus(201)
+    try{
+        const {rows}= await db.query(`
+        SELECT games."pricePerDay" 
+        FROM games
+        WHERE games.id=${gameId} ;
+        `)
+        const stock= await db.query(`
+        SELECT games."stockTotal",games.id,rentals."gameId" 
+        FROM games 
+        JOIN rentals ON rentals."gameId"= games.id
+        WHERE games.id=${gameId} ;
+        `)
+        // if(stock.rowCount >= stock.rows[0].stockTotal)
+        // {
+        //      return 
+        // }
+        const insertRental= db.query(`
+        INSERT INTO rentals ("customerId","gameId","rentDate",
+                "daysRented","returnDate","originalPrice","delayFee")
+        VALUES ($1,$2,$3,$4,$5,$6,$7);
+        `,[customerId,gameId,dayjs().format('YYYY-MM-DD'),daysRented,null,
+        rows[0].pricePerDay*daysRented,null])
+         res.sendStatus(201)
+         return;
+    }catch(e){
+        res.sendStatus(400);
+        return;
+    }
 }
