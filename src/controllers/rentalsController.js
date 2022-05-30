@@ -162,7 +162,7 @@ export async function deleteRentals(req,res){
       WHERE id=$1;
     `,[userId]);
      let rent=dataRent.rows[0];
-      if(rent.returnDate !== null){
+      if(rent.returnDate === null){
           return res.sendStatus(400)
       }
       if(dataRent.rows.length<1){
