@@ -13,4 +13,4 @@ app.use(categoriesRouter);
 app.use(gamesRouter);
 app.use(CustomersRouter);
 app.use(rentalsRouter);
-app.listen(5000,()=>{ console.log(chalk.bold.blue("Silencio, estamos no AR !!!!"))})
+app.listen(4000,()=>{ console.log(chalk.bold.blue("Silencio, estamos no AR !!!!"))})
