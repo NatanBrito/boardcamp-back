@@ -1,5 +1,5 @@
 import db from '../db.js';
-
+import dayjs from 'dayjs';
 export async function getRentals(req,res){
     let listRentals;
     let listCustomer;
@@ -85,4 +85,8 @@ export async function getRentals(req,res){
   }catch(e){
       res.sendStatus(400);
   }
+}
+export async function postRentals(req,res){
+    console.log(dayjs().format('YYYY-MM-DD'));
+    res.sendStatus(201)
 }
