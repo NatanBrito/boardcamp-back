@@ -13,4 +13,7 @@ app.use(categoriesRouter);
 app.use(gamesRouter);
 app.use(CustomersRouter);
 app.use(rentalsRouter);
-app.listen(4000,()=>{ console.log(chalk.bold.blue("Silencio, estamos no AR !!!!"))})
+const port = process.env.PORT || 4000;
+app.listen(port, () => {
+  console.log(chalk.bold.green("Silencio, estamos no AR!!!"));
+});
