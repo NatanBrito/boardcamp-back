@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const {Pool}= pg;
 
+
 {
     rejectUnauthorized: false
 }
